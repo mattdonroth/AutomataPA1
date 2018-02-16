@@ -1,4 +1,14 @@
 import sys
+
+def runMachine(dfa, start, accept, string):
+    state = str(start)
+    for char in string:
+        try:
+            state = dfa[state][char]
+        except:
+            print("Could not find key: ", char, " in state: ", state)
+    return str(state)
+
 #declaring out dfa representation
 dfa_dic = {}
 #opening the input
@@ -24,6 +34,9 @@ for line in iterinput:
         count+=1
         #splitting the transition
         a,b,c = line.split()
+        a = a.replace('\'', '')
+        b = b.replace('\'', '')
+        c = c.replace('\'', '')
         #adding the transition to our 2d dictionary
         dfa_dic[a] = dfa_dic.get(a, {})
         dfa_dic[a][b] = c
@@ -36,12 +49,18 @@ for line in iterinput:
 accept_states = next(iterinput)
 print("Start state", start_state)
 print("accept states", accept_states)
-print("iterating through the strings")
+print("running the machine")
 #iterating through the strings
-for line in iterinput:
-    print(line)
+for string in iterinput:
+    string = string.strip()
+    #print("attempting to run string: ", string)
+    ans = runMachine(dfa_dic, start_state, accept_states, string)
+    if ans in accept_states:
+        print("Accept")
+    else:
+        print("Reject")
 
 #error checking
-print(dfa_dic)
+#print(dfa_dic)
 
 
